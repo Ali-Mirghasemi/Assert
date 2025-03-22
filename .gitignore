@@ -1,0 +1,9 @@
+.vscode
+
+*.depend
+*.layout
+*.o
+*.map
+*.exe
+
+
