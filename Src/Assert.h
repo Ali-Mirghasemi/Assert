@@ -89,22 +89,30 @@ extern "C" {
  * you can enable this option
  */
 #define ASSERT_SUPPORT_DOUBLE                       1
-/**
- * @brief if you want to print assert details
- */
-#define ASSERT_SUPPORT_STDIO                        1
-/**
- * @brief if you want to print assert details
- */
-#define ASSERT_SUPPORT_PRINT                        1
-/**
- * @brief Enable assert hook function for print extra details
- */
-#define ASSERT_SUPPORT_HOOK                         1
-/**
- * @brief Set Assert End line
- */
-#define ASSERT_END_LINE                             "\r\n"
+#ifndef ASSERT_SUPPORT_STDIO
+    /**
+     * @brief if you want to print assert details
+     */
+    #define ASSERT_SUPPORT_STDIO                    1
+#endif
+#ifndef ASSERT_SUPPORT_PRINT
+    /**
+     * @brief if you want to print assert details
+     */
+    #define ASSERT_SUPPORT_PRINT                    1
+#endif
+#ifndef ASSERT_SUPPORT_HOOK 
+    /**
+     * @brief Enable assert hook function for print extra details
+     */
+    #define ASSERT_SUPPORT_HOOK                     0
+#endif
+#ifndef ASSERT_END_LINE
+    /**
+     * @brief Set Assert End line
+     */
+    #define ASSERT_END_LINE                         "\r\n"
+#endif
 /**
  * @brief Define Assert Line type
  */
