@@ -281,6 +281,19 @@ typedef struct {
  */
 #define assert(...)                             assertEq(__VA_ARGS__)
 /**
+ * @brief Same as assert(...) macro but return void if `left` and `right` not equal
+ */
+#define assertReturn(...)                       __assertXReturn(assert, __VA_ARGS__)
+/**
+ * @brief Same as assert(...) macro but return Assert_Line if `left` and `right` not equal
+ */
+#define assertReturnLine(...)                   __assertXReturnLine(assert, __VA_ARGS__)
+/**
+ * @brief Same as assert(...) macro but return Assert_Result if `left` and `right` not equal
+ */
+#define assertReturnResult(...)                 __assertXReturnResult(assert, __VA_ARGS__)
+
+/**
  * @brief Assert two variable and print if `left` and `right` not equal
  * Input Formats:
  *  (CONDITION)                 -> Check Condition is True otherwise print FILE:LINE
