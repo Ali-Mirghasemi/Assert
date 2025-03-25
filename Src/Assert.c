@@ -40,6 +40,12 @@ static const char* ASSERT_TYPES[] = {
 #if ASSERT_SUPPORT_DOUBLE
     "Double",
 #endif
+#if ASSERT_SUPPORT_RAW_LIST
+    "RawList",
+#endif
+#if ASSERT_SUPPORT_RAW_LIST
+    "StrList",
+#endif
 };
 
 /* --------------------------------- Implement Assert Functions ------------------------------------ */
@@ -72,9 +78,42 @@ Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condi
             res = memcmp(inputs.Left.Raw, inputs.Right.Raw, inputs.Length);
             break;
     #endif
+    #if ASSERT_SUPPORT_RAW_2D
+        case Assert_Type_Raw2D:
+            {
+                Assert_Length len = inputs.Length2;
+                uint8_t* left = inputs.Left.Raw2D;
+                uint8_t* right = inputs.Right.Raw2D;
+
+                while (len-- > 0) {
+                    if ((res = memcmp(left, right, inputs.Length)) != 0) {
+                        break;
+                    }
+
+                    left += inputs.Length;
+                    right += inputs.Length;
+                }
+            }
+            break;
+    #endif
     #if ASSERT_SUPPORT_STR
         case Assert_Type_Str:
             res = strcmp(inputs.Left.Str, inputs.Right.Str);
+            break;
+    #endif
+    #if ASSERT_SUPPORT_STR_LIST
+        case Assert_Type_StrList:
+            {
+                Assert_Length len = inputs.Length;
+                const char* left = inputs.Left.StrList;
+                const char* right = inputs.Right.StrList;
+
+                while (len-- > 0) {
+                    if ((res = strcmp(left++, right++)) != 0) {
+                        break;
+                    }
+                }
+            }
             break;
     #endif
         default:

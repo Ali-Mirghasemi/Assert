@@ -89,6 +89,17 @@ extern "C" {
  * you can enable this option
  */
 #define ASSERT_SUPPORT_DOUBLE                       1
+/**
+ * @brief if you need r/w const char* array variables and your platform support
+ * you can enable this option
+ */
+#define ASSERT_SUPPORT_RAW_2D                       1
+/**
+ * @brief if you need r/w const char* array variables and your platform support
+ * you can enable this option
+ */
+#define ASSERT_SUPPORT_STR_LIST                     1
+
 #ifndef ASSERT_SUPPORT_STDIO
     /**
      * @brief if you want to print assert details
@@ -179,6 +190,12 @@ typedef enum {
 #if ASSERT_SUPPORT_DOUBLE
     Assert_Type_Double,
 #endif
+#if ASSERT_SUPPORT_RAW_2D
+    Assert_Type_Raw2D,
+#endif
+#if ASSERT_SUPPORT_STR_LIST
+    Assert_Type_StrList,
+#endif
 } Assert_Type;
 /**
  * @brief Assert Supported inputs
@@ -223,6 +240,12 @@ typedef union {
 #if ASSERT_SUPPORT_DOUBLE
     double              Double;
 #endif
+#if ASSERT_SUPPORT_RAW_2D
+    void*               Raw2D;
+#endif
+#if ASSERT_SUPPORT_STR_LIST
+    const char*         StrList;
+#endif
 } Assert_Variable;
 /**
  * @brief Assert Inputs
@@ -231,6 +254,7 @@ typedef struct {
     Assert_Variable     Left;
     Assert_Variable     Right;
     Assert_Length       Length;
+    Assert_Length       Length2;
 } Assert_Inputs;
 /**
  * @brief Assert Condition
@@ -332,9 +356,14 @@ typedef struct {
  */
 #define assertEqValues(TYPE, L, R)              Assert_Values(Assert_Type_ ##TYPE, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = sizeof(__Assert_Type_ ##TYPE) }, Assert_Condition_Equal, __FILE__, __LINE__)
 /**
+ * 
  * @brief Assert two Raw values
  */
-#define assertEqRaw(TYPE, L, R, LEN)            Assert_Values(Assert_Type_Raw, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN) }, Assert_Condition_Equal, __FILE__, __LINE__)
+#define assertEqRaw(TYPE, L, R, LEN)            Assert_Values(Assert_Type_ ##TYPE, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN) }, Assert_Condition_Equal, __FILE__, __LINE__)
+/**
+ * @brief Assert two Raw values
+ */
+#define assertEqRaw2D(TYPE, L, R, LEN, LEN2)    Assert_Values(Assert_Type_ ##TYPE, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN), .Length2 = (LEN2) }, Assert_Condition_Equal, __FILE__, __LINE__)
 /**
  * @brief Same as assert(...) macro but return void if `left` and `right` not equal
  */
@@ -389,7 +418,11 @@ typedef struct {
 /**
  * @brief Assert two Raw values
  */
-#define assertNeRaw(TYPE, L, R, LEN)            Assert_Values(Assert_Type_Raw, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN) }, Assert_Condition_NotEqual, __FILE__, __LINE__)
+#define assertNeRaw(TYPE, L, R, LEN)            Assert_Values(Assert_Type_ ##TYPE, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN) }, Assert_Condition_NotEqual, __FILE__, __LINE__)
+/**
+ * @brief Assert two Raw values
+ */
+#define assertNeRaw2D(TYPE, L, R, LEN, LEN2)    Assert_Values(Assert_Type_ ##TYPE, (Assert_Inputs) { .Left = { .TYPE = (L) }, .Right = { .TYPE = (R) }, .Length = (LEN), .Length2 = (LEN2) }, Assert_Condition_NotEqual, __FILE__, __LINE__)
 /**
  * @brief Same as assert(...) macro but return void if `left` and `right` not equal
  */
@@ -432,9 +465,9 @@ Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condi
 #define __ASSERT_CAT_(X, Y)                     X ##Y
 #define __ASSERT_CAT(X, Y)                      __ASSERT_CAT_(X, Y)
 
-#define __ASSERT_N_(_0, _1, _2, _3, FMT, ...)   FMT
+#define __ASSERT_N_(_0, _1, _2, _3, _4, FMT, ...)   FMT
 #define __ASSERT_N(...)                         __ASSERT_N_(__VA_ARGS__)
-#define __ASSERT_FMT_PAT()                      Raw, Values, RawValues, Condition
+#define __ASSERT_FMT_PAT()                      Raw2D, Raw, Values, RawValues, Condition
 #define __ASSERT_BUILD__(XT, FMT, ...)          assert ##XT ##FMT(__VA_ARGS__)
 #define __ASSERT_BUILD_(XT, FMT, ...)           __ASSERT_BUILD__(XT, FMT, __VA_ARGS__)
 #define __ASSERT_BUILD(XT, ...)                 __ASSERT_BUILD_(XT, __ASSERT_N(__VA_ARGS__, __ASSERT_FMT_PAT()), __VA_ARGS__)
@@ -478,6 +511,12 @@ Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condi
 #endif
 #if ASSERT_SUPPORT_DOUBLE
     typedef double              __Assert_Type_Double;
+#endif
+#if ASSERT_SUPPORT_RAW_LIST
+    typedef void*               __Assert_Type_RawList;
+#endif
+#if ASSERT_SUPPORT_STR_LIST
+    typedef const char*         __Assert_Type_StrList;
 #endif
 
 // Find Maximum Primary Type
