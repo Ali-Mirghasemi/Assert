@@ -2,6 +2,10 @@
 
 int main()
 {
+#if ASSERT_SUPPORT_PRINT_HEADER
+    ASSERT_PRINT_HEADER("Assert Test", 32, '-');
+#endif
+
     assert(0 == 0);
     assertEq(10 == 10);
     assertNe(12 != 12);
