@@ -181,3 +181,18 @@ Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condi
     }
     return result;
 }
+
+#if ASSERT_SUPPORT_PRINT_HEADER
+static void __Assert_printHeaderSigns(uint16_t len, char pad) {
+    while (len-- > 0) {
+        ASSERT_PRINTF("%c", pad);
+    }
+}
+void Assert_printHeader(const char* title, uint16_t len, char pad) {
+    uint16_t halfLen = (len - strlen(title) - 2) >> 1;
+    __Assert_printHeaderSigns(halfLen, pad);
+    ASSERT_PRINTF(" %s ", title);
+    __Assert_printHeaderSigns(halfLen, pad);
+    ASSERT_PRINTF("%s", ASSERT_END_LINE);
+}
+#endif

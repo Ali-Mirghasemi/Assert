@@ -112,6 +112,12 @@ extern "C" {
      */
     #define ASSERT_SUPPORT_PRINT                    1
 #endif
+#ifndef ASSERT_SUPPORT_PRINT_HEADER
+    /**
+     * @brief if you want to print header assert details
+     */
+    #define ASSERT_SUPPORT_PRINT_HEADER             1
+#endif
 #ifndef ASSERT_SUPPORT_HOOK 
     /**
      * @brief Enable assert hook function for print extra details
@@ -144,10 +150,20 @@ typedef const char* Assert_File;
     #include <stdio.h>
 #endif // ASSERT_SUPPORT_STDIO
 
-#if ASSERT_SUPPORT_PRINT && !defined(ASSERT_PRINTF)
-    #define ASSERT_PRINTF                              printf
+#if ASSERT_SUPPORT_PRINT
+    #ifndef ASSERT_PRINTF
+        #define ASSERT_PRINTF                           printf
+    #endif
 #else
     #define ASSERT_PRINTF(...)
+#endif
+
+#if ASSERT_SUPPORT_PRINT_HEADER
+    #ifndef ASSERT_PRINT_HEADER
+        #define ASSERT_PRINT_HEADER                     Assert_printHeader
+    #endif
+#else
+    #define ASSERT_PRINT_HEADER(...)
 #endif
 /**
  * @brief Assert Supporetd input types
@@ -441,6 +457,10 @@ typedef struct {
 
 /* ---------------------------------- Private APIs ---------------------------------------- */
 Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condition condition, Assert_File file, Assert_Line line);
+
+#if ASSERT_SUPPORT_PRINT_HEADER
+    void Assert_printHeader(const char* title, uint16_t len, char pad);
+#endif
 
 #ifdef __cplusplus
 };
