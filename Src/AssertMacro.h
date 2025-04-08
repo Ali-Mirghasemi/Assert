@@ -11,7 +11,8 @@
 #ifndef _ASSERT_MACRO_H_
 #define _ASSERT_MACRO_H_
 
-
+#define __ASSERT_PRINT_FAILED_(F, L, E)         ASSERT_PRINTF("Assert Failed, " F ":" #L E)
+#define __ASSERT_PRINT_FAILED(F, L, E)          __ASSERT_PRINT_FAILED_(F, L ,E)
 
 /**
  * @brief Same as assert(...) macro but return void if `left` and `right` not equal

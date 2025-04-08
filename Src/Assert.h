@@ -373,7 +373,7 @@ typedef struct {
  * @brief Assert given condition, if condition False print FILE:LINE
  */
 #define assertEqCondition(CONDITION)            if (!(CONDITION)) { \
-                                                    ASSERT_PRINTF("Assert Failed, %s:%u%s", __FILE__, __LINE__, ASSERT_END_LINE); \
+                                                    __ASSERT_PRINT_FAILED(__FILE__, __LINE__, ASSERT_END_LINE); \
                                                 }
 /**
  * @brief Assert Left and Right values and determine size automaticaly
@@ -433,7 +433,7 @@ typedef struct {
  * @brief Assert given condition, if condition False print FILE:LINE
  */
 #define assertNeCondition(CONDITION)            if ((CONDITION)) { \
-                                                    ASSERT_PRINTF("Assert Failed, %s:%u%s", __FILE__, __LINE__, ASSERT_END_LINE); \
+                                                    __ASSERT_PRINT_FAILED(__FILE__, __LINE__, ASSERT_END_LINE); \
                                                 }
 /**
  * @brief Assert Left and Right values and determine size automaticaly

@@ -57,15 +57,15 @@ static void __Assert_printRaw(uint8_t* arr, Assert_Length len) {
     while (len-- > 0) {
         ASSERT_PRINTF("%02X, ", *arr++);
     }
-    ASSERT_PRINTF("]%s", ASSERT_END_LINE);
+    ASSERT_PRINTF("]" ASSERT_END_LINE);
 }
 
 #endif
 
 #define __ASSERT_PRINT_CASE(TYPE, XTYPE) \
 case Assert_Type_ ##TYPE: \
-    ASSERT_PRINTF("  Left:  "XTYPE"%s", inputs.Left.TYPE, ASSERT_END_LINE); \
-    ASSERT_PRINTF("  Right: "XTYPE"%s", inputs.Right.TYPE, ASSERT_END_LINE); \
+    ASSERT_PRINTF("  Left:  "XTYPE ASSERT_END_LINE, inputs.Left.TYPE); \
+    ASSERT_PRINTF("  Right: "XTYPE ASSERT_END_LINE, inputs.Right.TYPE); \
     break
 
 Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condition condition, Assert_File file, Assert_Line line) {
@@ -122,7 +122,7 @@ Assert_Result Assert_Values(Assert_Type type, Assert_Inputs inputs, Assert_Condi
     }
 
     if ((res == 0) == condition) {
-        ASSERT_PRINTF("Assert %s Failed, %s:%u%s", ASSERT_TYPES[type] ,file, line, ASSERT_END_LINE);
+        ASSERT_PRINTF("Assert %s Failed, %s:%u" ASSERT_END_LINE, ASSERT_TYPES[type], file, line);
         switch (type) {
         #if ASSERT_SUPPORT_RAW
             case Assert_Type_Raw:
