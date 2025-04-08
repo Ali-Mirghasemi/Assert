@@ -143,6 +143,16 @@ typedef uint32_t Assert_Length;
  */
 typedef const char* Assert_File;
 /************************************************************************/
+#define __ASSERT_VER_STR(major, minor, fix)     #major "." #minor "." #fix
+#define _ASSERT_VER_STR(major, minor, fix)      __ASSERT_VER_STR(major, minor, fix)
+/**
+ * @brief show stream version in string format
+ */
+#define ASSERT_VER_STR                          _ASSERT_VER_STR(ASSERT_VER_MAJOR, ASSERT_VER_MINOR, ASSERT_VER_FIX)
+/**
+ * @brief show stream version in integer format, ex: 0.2.0 -> 200
+ */
+#define ASSERT_VER                              ((ASSERT_VER_MAJOR * 10000UL) + (ASSERT_VER_MINOR * 100UL) + (ASSERT_VER_FIX))
 
 #include "AssertMacro.h"
 
